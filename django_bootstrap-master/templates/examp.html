@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% block title %}Bug Report Examples{% endblock %}
+{% load static %}
+
+{% block content %}
+
+  <style>
+    .bug-report-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .bug-columns {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .bug-card {
+      width: 350px;
+      padding: 15px;
+      border-radius: 10px;
+      color: white;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+      border: 3px solid #000;
+    }
+
+    .bug-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .bug-red {
+      background-color: #d9534f;
+    }
+
+    .bug-green {
+      background-color: #5cb85c;
+    }
+
+    .bug-title {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .bug-details {
+      font-size: 0.9rem;
+    }
+
+    .bug-details strong {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .arrow {
+      font-size: 2rem;
+      font-weight: bold;
+      color: black;
+    }
+
+    .central-heading {
+      text-align: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+      .bug-report-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .bug-columns {
+        flex-direction: column;
+        align-items: center;
+      }
+      .column {
+        align-items: center;
+      }
+    }
+  </style>
+
+  <div class="container">
+    <h2 class="text-center mb-4">Bug Report Dashboard</h2>
+    
+    <div class="central-heading">Input & Output</div>
+    
+    <div class="bug-columns">
+      <div class="column">
+      
+        <div class="bug-card bug-red">
+          <div class="bug-title">Input: Bug #103 - Thunderbird Webextension API Encryption Status Issue</div>
+          <div class="bug-details">
+            I was trying to work with Thunderbird's email client and I ran into a frustrating problem. I opened the program, navigated to the compose tab to start writing a new email, and then tried to access the encryption status using an add-on - it seemed like a simple thing, but it turned out not to be so easy. What I expected was that I'd be able to see if my email is being sent encrypted or not through the webextension API's compose details, but what actually happened was that there was no way for me to get this information while composing or sending an email - it's like the encryption status just vanished! It's really confusing and problematic because without this info, add-ons can't issue warnings based on whether emails are being sent encrypted or not. I'm using Thunderbird version 91.x.x, Firefox 92.0, and Windows 10 (NT 10.0), and all of these details seem to be important in figuring out why this isn't working.
+          </div>
+        </div>
+
+        <div class="bug-card bug-red">
+          <div class="bug-title">Output: Bug #103 - Thunderbird Webextension API Encryption Status Issue</div>
+          <div class="bug-details">
+
+
+
+I was trying to access Google or YouTube using Firefox Nightly with HTTP/3 support enabled. I opened the browser and went to try and load those websites. What I expected to happen was that the browser would quickly establish a secure connection and load the pages without any delay - just like it usually does. But what actually happened was quite frustrating: there was this noticeable pause, followed by an error message telling me the secure connection had failed. It's really confusing because normally Firefox Nightly is super reliable when loading these types of websites. I'm using version [Insert specific version number here] and build number 88.0.4324.96 on a Linux operating system. My user agent is Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36, in case that's relevant.
+          </div>
+        </div>
+      </div>
+      
+      <div class="arrow">&#8594;</div>
+      
+      <div class="column">
+        <div class="bug-card bug-green">
+          <div class="bug-title">Output: Bug #103 -  Thunderbird Webextension API Encryption Status Issue</div>
+          <div class="bug-details">
+            <strong>Steps to Reproduce:</strong>
+            <ol>
+              <li>Open Thunderbird email client.</li>
+              <li>Navigate to the compose tab to start writing a new email.</li>
+              <li>Access the webextension API to get the encryption status of the email being sent.</li>
+            </ol>
+            <strong>Expected Results:</strong> The webextension API should provide the encryption status of the email being sent.
+            <strong>Actual Results:</strong> The webextension API does not provide the encryption status of the email being sent.
+            <strong>Additional Information:</strong>
+            <ul>
+              <li>User Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0</li>
+              <li>Thunderbird Version: 91.x.x</li>
+              <li>Operating System: Windows 10 (NT 10.0)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="bug-card bug-green">
+          <div class="bug-title">Input: Bug #104 - Firefox Nightly HTTP/3 Secure Connection Issue</div>
+          <div class="bug-details">
+            <strong>Steps to Reproduce:</strong>
+            <ol>
+              <li>Open Firefox Nightly with HTTP/3 support enabled.</li>
+              <li>Attempt to access Google or YouTube using the browser.</li>
+            </ol>
+            <strong>Expected Results:</strong> The browser establishes a secure connection and loads the website without delay.
+            <strong>Actual Results:</strong> The browser fails to establish a secure connection, displaying an error message.
+            <strong>Additional Information:</strong>
+            <ul>
+              <li>User Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36</li>
+              <li>Software Version: Firefox Nightly</li>
+              <li>Build Number: 88.0.4324.96</li>
+              <li>Operating System: Linux</li>
+              <li>HTTP/3 Support: Enabled</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

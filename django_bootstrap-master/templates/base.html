@@ -1,0 +1,470 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shakti Lab</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .top-bar {
+      background-color: #000;
+      color: white;
+      padding: 5px 0;
+    }
+    .logo {
+      max-height: 40px;
+    }
+    .hero {
+      padding: 80px 0;
+      position: relative;
+    }
+    .hero-image {
+      /* Perfect circle settings */
+      border-radius: 50%;
+      overflow: hidden;
+      width: 80%; /* You can adjust this for overall size */
+      margin: 0 auto; /* Center the image container */
+      aspect-ratio: 1 / 1; /* Perfect circle - equal width and height */
+    }
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* This ensures the image fills the container without distortion */
+    }
+    .mit-logo {
+      max-height: 70px;
+    }
+  </style>
+  <style>
+       .modal-body {
+            text-align: center;
+        }
+        .pdf-container {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ccc;
+        }
+    /* General styles */
+    body {
+      font-family: 'Arial', sans-serif;
+    }
+    
+    .logo {
+      max-height: 50px;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+    
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 3px;
+      background-color: #a31f34; /* MIT red */
+      margin: 10px auto;
+    }
+    
+    /* Card styles */
+    .research-cards {
+      padding: 40px 0;
+    }
+    
+    .card-wrapper {
+      margin-bottom: 30px;
+      height: 100%;
+    }
+    
+    .research-card {
+      position: relative;
+      height: 280px;
+      border: 3px solid #333;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .research-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .card-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+    
+    .card-title {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+    
+    .card-description {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    
+    /* Hover effects */
+    .research-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      border-color: #000000; /* MIT red on hover */
+    }
+    
+    .research-card:hover img {
+      transform: scale(1.1);
+    }
+    
+ 
+    /* Read more button that appears on hover */
+    .read-more-btn {
+      position: absolute;
+      bottom: -50px; /* Hidden by default */
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      width: 60%;
+      padding: 8px;
+      background-color: white;
+      color: #000000;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: bottom 0.3s ease;
+      opacity: 0;
+    }
+    
+    .research-card:hover .read-more-btn {
+      bottom: 20px;
+      opacity: 1;
+    }
+    
+    /* More button styles */
+    .more-button {
+      display: block;
+      width: 200px;
+      margin: 30px auto;
+      padding: 10px;
+      text-align: center;
+      background-color: white;
+      color: #000000;
+      border: 2px solid #a31f34;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+    .more-button:hover {
+      /* background-color: #a31f34; */
+      color: white;
+    }
+    /* Footer Styles */
+.site-footer {
+  background-color: #f8f8f8;
+  padding: 40px 0;
+  margin-top: 50px;
+  border-top: 1px solid #e7e7e7;
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.footer-left {
+  flex: 1;
+  max-width: 250px;
+  margin-right: 20px;
+}
+
+.footer-left .logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.footer-left .logo img {
+  max-height: 50px;
+  margin-right: 10px;
+}
+
+.footer-left .logo h3 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 10px;
+}
+
+.footer-links li a {
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.footer-links li a:hover {
+  color: #a31f34; /* MIT red */
+}
+
+.footer-middle {
+  display: flex;
+  flex: 1;
+  justify-content: space-around;
+}
+
+.footer-column h4 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 10px;
+}
+
+.footer-column ul li a {
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.footer-column ul li a:hover {
+  color: #a31f34; /* MIT red */
+}
+
+.footer-right {
+  flex: 1;
+  max-width: 350px;
+}
+
+.newsletter h4 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.newsletter p {
+  font-size: 14px;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.newsletter p a {
+  color: #a31f34;
+  text-decoration: none;
+}
+
+.subscribe-form {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.subscribe-form input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 0;
+  font-size: 14px;
+}
+
+.subscribe-button {
+  background-color: #000;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.subscribe-button:hover {
+  background-color: #333;
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #f1f1f1;
+  color: #333;
+  transition: all 0.2s;
+}
+
+.social-links a:hover {
+  background-color: #a31f34;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .footer-content {
+    flex-direction: column;
+  }
+  
+  .footer-left, .footer-middle, .footer-right {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+  
+  .footer-middle {
+    margin: 20px 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer-middle {
+    flex-direction: column;
+  }
+  
+  .footer-column {
+    margin-bottom: 20px;
+  }
+  
+  .subscribe-form {
+    flex-direction: column;
+  }
+  
+  .subscribe-form input {
+    margin-bottom: 10px;
+  }
+  
+}
+.white-link {
+    color: white; /* Sets the text color to white */
+    text-decoration: none; /* Optional: Removes the underline from the link */
+  }
+  /* Move the text down just for the Research Team card */
+/* Move text down and make button smaller for Research Team card */
+.research-card.research-team .card-content {
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding-bottom: 20px; /* Adjust as needed */
+}
+
+/* Reduce the size of the READ MORE button for Research Team */
+.research-card.research-team .read-more-btn {
+    font-size: 12px; /* Smaller font size */
+    padding: 5px 10px; /* Smaller padding */
+    width: 150px; /* Adjust width as needed */
+}
+
+
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+      <div class="container d-flex justify-content-end">
+       <span><a href="/admin" class="white-link"> Team Login </a></span>
+      </div>
+     </div>
+  
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <img src="https://shaktilab.org/static/images/lab_logo-modified.png" alt="MIT Energy Initiative" class="logo">
+        <strong> SHAKTI Lab </strong> 
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="#" role="button">About Us</a>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <i class="bi bi-search"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://www.ucalgary.ca/">
+              <img src="https://ucalgary.ca/sites/default/files/styles/ucws_image_desktop/public/2023-03/UCalgary-horizontal-logo_2.png?itok=-CeFcNPH" alt="MIT" class="mit-logo">
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container mt-4">
+    {% block content %}
+    <!-- Page-specific content will go here -->
+    {% endblock %}
+</div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-left">
+          <div class="logo">
+            <img src="https://shaktilab.org/static/images/lab_logo-modified.png" alt="MIT Energy Initiative">
+            <h3>Shakti Lab</h3>
+          </div>
+          <ul class="footer-links">
+            <li><a href="/">PRIVACY</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-middle">
+          <div class="footer-column">
+            <h4>RESEARCH</h4>
+            <ul>
+              <li><a href="/team">Team</a></li>
+            </ul>
+          </div>
+          
+          </div>
+      </div>
+    </div>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

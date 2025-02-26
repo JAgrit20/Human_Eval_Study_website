@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block title %}Home - My Website{% endblock %}
+{% load static %}
+
+{% block content %}
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h1 class="mb-4">Generate High-Quality Bug Reports Automatically with AI</h1>
+          <p class="lead">
+            Leveraging advanced fine-tuned Language Models, our tool instantly converts natural language bug reports into structured, developer-ready bug reports. Reduce ambiguity, accelerate resolution time, and improve software quality.
+          </p>
+          <a href="https://bugcraft.jobmatchify.com/" class="text-decoration-none">
+            <p class="mt-5">Live Demo →</p>
+          </a>
+        </div>
+        <div class="col-lg-6">
+          <div class="hero-image">
+            <img src="https://innovatecalgary.com/wp-content/uploads/2023/02/University-of-Calgary-1200x843.jpg" alt="MIT Building" class="img-fluid">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container research-cards">
+    <h2 class="section-title">RESEARCH</h2>
+    
+    <div class="row">
+      <!-- Card with Popup -->
+      <div class="col-md-6 card-wrapper">
+        <a href="#" class="text-decoration-none open-popup">
+          <div class="research-card">
+            <img src="https://elm.umaryland.edu/announcements/Announcements-Content/Volunteer-Square.jpg" alt="Future Energy Systems Center">
+            <div class="card-content">
+              <h3 class="card-title">Contribute to Bug Reporting tool Research</h3>
+              <p class="card-description">Participate in study to improve software bug triage and resolution time.</p>
+              <button class="read-more-btn">READ MORE</button>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Modal for Accept Form -->
+      <div class="modal fade" id="contentModal" tabindex="-1" aria-labelledby="contentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contentModalLabel">Please Accept the Content Form</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe src="{% static 'Filled_CFREB_Consent_Bug_report_Quality.pdf' %}" class="pdf-container" width="100%" height="400px"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Reject</button>
+                    <button type="button" class="btn btn-primary" id="accept-btn">Accept</button>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- Other Research Cards -->
+      <div class="col-md-6 card-wrapper" onclick="showAlert(event)">
+        <a href="studies-and-reports.html" class="text-decoration-none">
+          <div class="research-card">
+            <img src="https://ucalgary.ca/sites/default/files/styles/ucws_image_desktop/public/2019-10/UCalgary_Horizontal_logo_reversed.jpg?itok=r3iT0p01" alt="Studies and Reports">
+            <div class="card-content">
+              <h3 class="card-title">Ethics Report</h3>
+              <p class="card-description">Approval from Conjoint Faculties Research Ethics Board (Ucalgary)</p>
+              <button class="read-more-btn">READ MORE</button>
+            </div>
+          </div>
+        </a>
+      </div>
+       <!-- Card 3 -->
+       <div class="col-md-6 card-wrapper">
+        <a href="seed-fund.html" class="text-decoration-none">
+          <div class="research-card">
+            <img src="https://ucalgary.ca/sites/default/files/styles/ucws_image_desktop/public/2019-10/UCalgary_Horizontal_logo_colour_BlackBackground.jpg?itok=ac5lrHpi" alt="Seed Fund Program">
+            <div class="card-content">
+              <h3 class="card-title">Study Design</h3>
+              <p class="card-description">Learn about our human evaluation study</p>
+              <button class="read-more-btn">READ MORE</button>
+            </div>
+          </div>
+        </a>
+      </div>
+      
+      <!-- Card 4 -->
+      <div class="col-md-6 card-wrapper">
+        <a href="/examples" class="text-decoration-none">
+          <div class="research-card">
+            <img src="https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg" alt="Research Projects">
+            <div class="card-content">
+              <h3 class="card-title">Sample Responses</h3>
+              <p class="card-description">Input & Output Examples</p>
+              <button class="read-more-btn">READ MORE</button>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <!-- Card 3 -->
+      <div class="col-md-6 card-wrapper">
+        <a href="/team" class="text-decoration-none">
+          <div class="research-card research-team">
+            <img src="{% static 'team_BW.png' %}" alt="Seed Fund Program">
+            <div class="card-content">
+              <h3 class="card-title">Research Team</h3>
+              <p class="card-description">Learn about Ucalgary faculty</p>
+              <button class="read-more-btn">READ MORE</button>
+            </div>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-6 card-wrapper" onclick="showAlert(event)">
+        <a href="seed-fund.html" class="text-decoration-none">
+          <div class="research-card">
+            <img src="https://ucalgary.ca/sites/default/files/styles/ucws_image_desktop/public/2019-10/UCalgary_Horizontal_logo_colour_BlackBackground.jpg?itok=ac5lrHpi" alt="Seed Fund Program">
+            <div class="card-content">
+              <h3 class="card-title">Research Paper</h3>
+              <p class="card-description"></p>
+              <!-- <button class="read-more-btn">READ MORE</button> -->
+            </div>
+          </div>
+        </a>
+      </div>
+      </div>
+      
+
+      <script>
+        function showAlert(event) {
+            event.preventDefault();
+            alert("Under Review");
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelector(".open-popup").addEventListener("click", function (event) {
+                event.preventDefault();
+                let modal = new bootstrap.Modal(document.getElementById("contentModal"));
+                modal.show();
+            });
+
+            document.getElementById("accept-btn").addEventListener("click", function () {
+                window.location.href = "https://bugcraft.jobmatchify.com/";
+            });
+        });
+      </script>
+
+    </div>
+  </div>
+{% endblock %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>

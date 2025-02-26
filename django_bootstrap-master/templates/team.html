@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block title %}Our Team - Shakti Lab{% endblock %}
+{% load static %}
+
+{% block content %}
+<div class="team-section">
+  <div class="container py-5">
+    <div class="row mb-5">
+      <div class="col-12 text-center">
+        <h1 class="section-title">Our Team</h1>
+        <div class="title-underline"></div>
+      </div>
+    </div>
+    
+    <div class="row justify-content-center">
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="team-card">
+          <div class="team-img-container">
+            <img src="{% static 'Ann.png' %}" alt="Akash Sorathiya" class="team-img">
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">
+              Dr. Ann Barcomb</h3>
+            <p class="team-position">Assistant Professor, Schulich School of Engineering, Department of Electrical and Software Engineering</p>
+            <div class="team-social">
+              <a href="mailto:ann.barcomb@ucalgary.ca" class="social-icon"><i class="fas fa-envelope"></i></a>
+              <a href="https://de.linkedin.com/in/annbarcomb" class="social-icon"><i class="fab fa-linkedin"></i></a>
+              <a href="https://barcomb.org/" class="social-icon"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="team-card">
+          <div class="team-img-container">
+            <img src="{% static 'Gouri.png' %}" alt="Jacob Idoko" class="team-img">
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Dr. Gouri Ginde (Deshpande)</h3>
+            <p class="team-position">Assistant Professor,
+
+              Schulich School of Engineering, Department of Electrical and Software Engineering</p>
+            <div class="team-social">
+              <a href="mailto:gouri.ginde@ucalgary.ca" class="social-icon"><i class="fas fa-envelope"></i></a>
+              <a href="https://www.linkedin.com/in/gouriginde/" class="social-icon"><i class="fab fa-linkedin"></i></a>
+              <a href="https://github.com/gouriginde" class="social-icon"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-4 col-md-6 mb-4">
+        <div class="team-card">
+          <div class="team-img-container">
+            <img src="{% static 'Jags.png' %}" alt="John Doe" class="team-img">
+          </div>
+          <div class="team-info">
+            <h3 class="team-name">Jagrit Acharya</h3>
+            <p class="team-position">MSc (Thesis) Student</p>
+            <div class="team-social">
+              <a href="mailto:jagrit.acharya1@ucalgary.ca" class="social-icon"><i class="fas fa-envelope"></i></a>
+              <a href="https://www.linkedin.com/in/jagritacharya/" class="social-icon"><i class="fab fa-linkedin"></i></a>
+              <a href="https://github.com/JAgrit20" class="social-icon"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Font Awesome for social icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  .team-section {
+    padding: 3rem 0;
+    background-color: #f8f9fa;
+  }
+  
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #344767;
+    margin-bottom: 1rem;
+  }
+  
+  .title-underline {
+    height: 4px;
+    width: 70px;
+    background: linear-gradient(90deg, #4f71a1, #2c3e50);
+    margin: 0 auto 2rem;
+    border-radius: 2px;
+  }
+  
+  .team-card {
+    background-color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+  }
+  
+  .team-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  .team-img-container {
+    position: relative;
+    overflow: hidden;
+    height: 300px;
+  }
+  
+  .team-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+  
+  .team-card:hover .team-img {
+    transform: scale(1.05);
+  }
+  
+  .team-info {
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .team-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #344767;
+    margin-bottom: 0.5rem;
+  }
+  
+  .team-position {
+    font-size: 1rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+  }
+  
+  .team-social {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background-color: #f0f2f5;
+    color: #4f71a1;
+    border-radius: 50%;
+    transition: all 0.3s;
+  }
+  
+  .social-icon:hover {
+    background-color: #4f71a1;
+    color: white;
+    transform: translateY(-3px);
+  }
+  
+  @media (max-width: 992px) {
+    .team-card {
+      margin-bottom: 2rem;
+    }
+  }
+</style>
+{% endblock %}
