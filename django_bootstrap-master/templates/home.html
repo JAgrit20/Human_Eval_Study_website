@@ -1,0 +1,296 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Custom Inline Styles for the Todo Section -->
+<style>
+    :root {
+        --primary-color: #4361ee;
+        --secondary-color: #3f37c9;
+        --completed-color: #4cc9f0;
+        --background-color: #f8f9fa;
+        --text-color: #212529;
+        --light-text: #6c757d;
+        --danger-color: #e63946;
+    }
+    
+    .todo-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-top: 20px;
+    }
+    
+    h1 {
+        text-align: center;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+    }
+    
+    .input-group {
+        display: flex;
+        margin-bottom: 20px;
+    }
+    
+    #todo-input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px 0 0 4px;
+        font-size: 16px;
+    }
+    
+    #add-btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 0 4px 4px 0;
+        transition: background-color 0.3s;
+    }
+    
+    #add-btn:hover {
+        background-color: var(--secondary-color);
+    }
+    
+    .todo-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        animation: fadeIn 0.5s;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .todo-item:last-child {
+        border-bottom: none;
+    }
+    
+    .todo-checkbox {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: var(--primary-color);
+    }
+    
+    .todo-title {
+        flex: 1;
+        font-size: 16px;
+        transition: color 0.3s;
+    }
+    
+    .completed .todo-title {
+        text-decoration: line-through;
+        color: var(--light-text);
+    }
+    
+    .delete-btn {
+        background-color: transparent;
+        color: var(--danger-color);
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+    }
+    
+    .delete-btn:hover {
+        opacity: 1;
+    }
+    
+    .empty-list {
+        text-align: center;
+        color: var(--light-text);
+        font-style: italic;
+        padding: 20px 0;
+    }
+    
+    .date-info {
+        font-size: 12px;
+        color: var(--light-text);
+        margin-left: 30px;
+    }
+    
+    .todo-count {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: var(--light-text);
+    }
+</style>
+
+<h1>Todo List</h1>
+
+<div class="todo-container">
+    <div class="input-group">
+        <input type="text" id="todo-input" placeholder="Add a new task...">
+        <button id="add-btn">Add</button>
+    </div>
+    
+    <div id="todo-list">
+        {% if todos %}
+            {% for todo in todos %}
+                <div 
+                  class="todo-item {% if todo.completed %}completed{% endif %}" 
+                  data-id="{{ todo.id }}"
+                >
+                    <input 
+                      type="checkbox" 
+                      class="todo-checkbox" 
+                      {% if todo.completed %}checked{% endif %}
+                    >
+                    <span class="todo-title">{{ todo.title }}</span>
+                    <span class="date-info">
+                        {{ todo.created_at|date:"M d, H:i" }}
+                    </span>
+                    <button class="delete-btn">×</button>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-list">No tasks yet. Add one above!</div>
+        {% endif %}
+    </div>
+    
+    <div class="todo-count">
+        {{ todos.count }} task{% if todos.count != 1 %}s{% endif %} total
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const todoInput = document.getElementById('todo-input');
+    const addBtn = document.getElementById('add-btn');
+    const todoList = document.getElementById('todo-list');
+    const todoCount = document.querySelector('.todo-count');
+    
+    // Add new todo
+    addBtn.addEventListener('click', addTodo);
+    todoInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            addTodo();
+        }
+    });
+    
+    // Handle checkbox and delete buttons
+    todoList.addEventListener('click', function(e) {
+        const todoItem = e.target.closest('.todo-item');
+        if (!todoItem) return;
+        
+        const todoId = todoItem.dataset.id;
+        
+        if (e.target.classList.contains('todo-checkbox')) {
+            toggleTodo(todoId, todoItem);
+        } else if (e.target.classList.contains('delete-btn')) {
+            deleteTodo(todoId, todoItem);
+        }
+    });
+    
+    function addTodo() {
+        const title = todoInput.value.trim();
+        if (!title) return;
+        
+        fetch('/add/', {
+            method: 'POST',
+            body: JSON.stringify({ title: title }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Clear input
+            todoInput.value = '';
+            
+            // Remove empty list message if present
+            const emptyList = todoList.querySelector('.empty-list');
+            if (emptyList) {
+                emptyList.remove();
+            }
+            
+            // Create new todo item
+            const todoItem = document.createElement('div');
+            todoItem.className = 'todo-item';
+            todoItem.dataset.id = data.id;
+            
+            const date = new Date(data.created_at);
+            const formattedDate = 
+                `${date.toLocaleString('default', { month: 'short' })} 
+                 ${date.getDate()}, 
+                 ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+
+            todoItem.innerHTML = `
+                <input type="checkbox" class="todo-checkbox">
+                <span class="todo-title">${data.title}</span>
+                <span class="date-info">${formattedDate}</span>
+                <button class="delete-btn">×</button>
+            `;
+            
+            // Add to list
+            todoList.prepend(todoItem);
+            
+            // Update count
+            updateTodoCount(1);
+        })
+        .catch(error => console.error('Error adding todo:', error));
+    }
+    
+    function toggleTodo(todoId, todoItem) {
+        fetch(`/toggle/${todoId}/`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    todoItem.classList.toggle('completed', data.completed);
+                }
+            })
+            .catch(error => console.error('Error toggling todo:', error));
+    }
+    
+    function deleteTodo(todoId, todoItem) {
+        fetch(`/todo/delete/${todoId}/`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Animate removal
+                    todoItem.style.opacity = 0;
+                    todoItem.style.height = '0';
+                    todoItem.style.marginTop = '0';
+                    todoItem.style.marginBottom = '0';
+                    todoItem.style.padding = '0';
+                    todoItem.style.overflow = 'hidden';
+                    todoItem.style.transition = 'all 0.3s ease';
+                    
+                    setTimeout(() => {
+                        todoItem.remove();
+                        updateTodoCount(-1);
+                        
+                        // If no todos left, add empty message
+                        if (todoList.children.length === 0) {
+                            const emptyMessage = document.createElement('div');
+                            emptyMessage.className = 'empty-list';
+                            emptyMessage.textContent = 'No tasks yet. Add one above!';
+                            todoList.appendChild(emptyMessage);
+                        }
+                    }, 300);
+                }
+            })
+            .catch(error => console.error('Error deleting todo:', error));
+    }
+    
+    function updateTodoCount(change) {
+        const currentCount = parseInt(todoCount.textContent.split(' ')[0]) + change;
+        todoCount.textContent = 
+            `${currentCount} task${currentCount !== 1 ? 's' : ''} total`;
+    }
+});
+</script>
+
+{% endblock content %}
