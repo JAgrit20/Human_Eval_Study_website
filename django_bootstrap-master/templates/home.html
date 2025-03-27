@@ -39,18 +39,19 @@
     .bug-buttons {
         display: flex;
         gap: 10px;
+        align-items: center;
     }
     
     .bug-btn {
-    padding: 8px 16px;
-    border-radius: 4px;
-    border: none;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: inline-block;
-    text-decoration: none;
-}
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-block;
+        text-decoration: none;
+    }
     
     .bug-btn.normal {
         background-color: var(--green-color);
@@ -186,20 +187,89 @@
         font-size: 14px;
         color: var(--light-text);
     }
+
+    /* Additional styles for our new dropdowns section */
+    .bug-report-questions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-right: 20px;
+    }
+    .bug-report-questions select {
+        padding: 6px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+    }
+    .bug-report-questions label {
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+    .bug-report-questions-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+
+
+.bug-report-questions select {
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
 </style>
 
 <!-- Modified header section with buttons -->
+<div class="bug-report-questions">
+    <div>
+        <label for="sourceSelect">How did you hear about us?</label>
+        <select id="sourceSelect">
+            <option value="" disabled selected>-- Please choose an option --</option>
+            <option value="Personal Invite Email">Personal Invite Email</option>
+            <option value="Bugzilla Chat Platform">Bugzilla Chat Platform</option>
+            <option value="Instructor">Instructor</option>
+        </select>
+    </div>
+    <div>
+        <label for="experienceSelect">How much experience do you have with filing bug reports?</label>
+        <select id="experienceSelect">
+            <option value="" disabled selected>-- Please choose an option --</option>
+            <option value="None at all">None at all</option>
+            <option value="Some experience">Some experience</option>
+            <option value="Expert">Expert</option>
+        </select>
+    </div>
+</div>
 <div class="todo-header">
     <h1>Todo List</h1>
     <div class="bug-buttons">
-        <a class="{{ bug_report_class }}" href="{{ bug_report_url }}" target="_blank"> {{ bug_report_text }}
+        
+        <!-- Mandatory Questions Before Bug Report -->
+       
+
+        <!-- Bug Report Button(s) -->
+        <a class="{{ bug_report_class }}" 
+           href="{{ bug_report_url }}" 
+           id="bug-report-btn" 
+           target="_blank">
+           {{ bug_report_text }}
         </a>
-        </div>
+
+        {% comment %}
+          If you also have an AI bug report button, include something like:
+          <a class="bug-btn ai" href="{{ bug_report_url }}" id="ai-bug-report-btn" target="_blank">
+              File Bug Report with AI
+          </a>
+        {% endcomment %}
+    </div>
 </div>
 
 <div class="todo-count">
     {{ todos.count }} task{% if todos.count != 1 %}s{% endif %} total
 </div>
+
 <div class="todo-container">
     <div class="input-group">
         <input type="text" id="todo-input" placeholder="Add a new task...">
@@ -229,8 +299,6 @@
             <div class="empty-list">No tasks yet. Add one above!</div>
         {% endif %}
     </div>
-    
-  
 </div>
 
 <script>
@@ -239,23 +307,65 @@ document.addEventListener('DOMContentLoaded', function() {
     const addBtn = document.getElementById('add-btn');
     const todoList = document.getElementById('todo-list');
     const todoCount = document.querySelector('.todo-count');
+
+    // Two mandatory selects
+    const sourceSelect = document.getElementById('sourceSelect');
+    const experienceSelect = document.getElementById('experienceSelect');
     
-    const bugReportBtn = document.querySelector('.bug-btn.normal');
-    const aiBugReportBtn = document.querySelector('.bug-btn.ai');
-    
-    // Add event listeners only if buttons exist
+    // Bug report button(s)
+    const bugReportBtn = document.getElementById('bug-report-btn');
+    // const aiBugReportBtn = document.getElementById('ai-bug-report-btn'); 
+    // (Uncomment if you have a separate AI button)
+
+    // --- BUG REPORT CLICK HANDLING ---
     if (bugReportBtn) {
-        bugReportBtn.addEventListener('click', function() {
-            console.log('File Bug Report clicked');
+        bugReportBtn.addEventListener('click', function(event) {
+            // Prevent direct navigation
+            event.preventDefault();
+
+            // Get selected values
+            const sourceValue = sourceSelect.value;
+            const experienceValue = experienceSelect.value;
+
+            // Check if both are selected
+            if (!sourceValue || !experienceValue) {
+                alert("Please select both dropdown options before proceeding.");
+                return;
+            }
+
+            // Build new URL with query params
+            const baseUrl = "{{ bug_report_url }}"; // from template context
+            const finalUrl = baseUrl 
+                             + "&source=" + encodeURIComponent(sourceValue)
+                             + "&experience=" + encodeURIComponent(experienceValue);
+
+            // Open in a new tab
+            window.open(finalUrl, '_blank');
         });
     }
-    
+
+    // If there's a separate AI bug report button, do the same:
+    /*
     if (aiBugReportBtn) {
-        aiBugReportBtn.addEventListener('click', function() {
-            console.log('File Bug Report with AI clicked');
+        aiBugReportBtn.addEventListener('click', function(event) {
+            event.preventDefault();
+            const sourceValue = sourceSelect.value;
+            const experienceValue = experienceSelect.value;
+            if (!sourceValue || !experienceValue) {
+                alert("Please select both dropdown options before proceeding.");
+                return;
+            }
+            const baseUrl = "{{ bug_report_url }}";
+            const finalUrl = baseUrl 
+                             + "&source=" + encodeURIComponent(sourceValue)
+                             + "&experience=" + encodeURIComponent(experienceValue);
+            window.open(finalUrl, '_blank');
         });
     }
-    
+    */
+
+    // --- TODO LIST HANDLERS BELOW ---
+
     // Add new todo
     addBtn.addEventListener('click', addTodo);
     todoInput.addEventListener('keypress', function(e) {
@@ -264,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Handle checkbox and delete buttons with improved event delegation
+    // Handle checkbox and delete buttons (event delegation)
     todoList.addEventListener('click', function(e) {
         const todoItem = e.target.closest('.todo-item');
         if (!todoItem) return;
@@ -339,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     todoItem.classList.toggle('completed', data.completed);
                     
-                    // Add a subtle animation for last 5 items when checked
+                    // Subtle animation for last 5 items when checked
                     const allItems = Array.from(todoList.children);
                     const itemIndex = allItems.indexOf(todoItem);
                     if (itemIndex >= allItems.length - 5) {
