@@ -17,6 +17,9 @@ def examples(request):
     return render(request, 'examp.html', {})
 def team(request):
     return render(request, 'team.html', {})
+import random
+from django.shortcuts import render
+
 def home(request):
     BUG_REPORT_CONDITIONS = {
         'normal': {
@@ -25,24 +28,36 @@ def home(request):
             'class': 'bug-btn normal'
         },
         'ai': {
-            'url': 'https://bugwise.shaktilab.org/research', # AI version URL
+            'url': 'https://bugwise.shaktilab.org/research',
             'text': 'File Bug Report with AI',
             'class': 'bug-btn ai'
         }
     }
-    condition_keys = list(BUG_REPORT_CONDITIONS.keys()) # ['normal', 'ai']
+    # Define the order explicitly for indexing
+    condition_keys_ordered = ['normal', 'ai']
 
     # Check if a valid condition is already assigned in the session
     assigned_condition_key = request.session.get('bug_report_condition')
 
     if assigned_condition_key not in BUG_REPORT_CONDITIONS:
-        # If no valid condition assigned, randomly choose one (50/50 probability)
-        assigned_condition_key = random.choice(condition_keys)
+        # Ensure the session has a key. This might create/save the session if it's new.
+        if not request.session.session_key:
+            request.session.create()
+
+        # Use a more explicit 50-50 split method
+        # Option 1: Random selection
+        assigned_condition_key = random.choice(condition_keys_ordered)
+
+        # Alternative Option 2: Session-based hash method (previous approach)
+        # session_key = request.session.session_key
+        # assignment_index = hash(session_key) % 2
+        # assigned_condition_key = condition_keys_ordered[assignment_index]
+
         # Store the assigned condition in the session for persistence
         request.session['bug_report_condition'] = assigned_condition_key
-        # Ensure the session is saved if modified
-        request.session.modified = True
-        print(f"User session {request.session.session_key}: Randomly assigned bug report condition '{assigned_condition_key}'") # For debugging
+        
+        # Optional: Add logging or print for tracking
+        print(f"User session {request.session.session_key}: Assigned bug report condition '{assigned_condition_key}'.")
 
     # Retrieve the details for the assigned condition
     assigned_condition_details = BUG_REPORT_CONDITIONS[assigned_condition_key]
@@ -57,8 +72,6 @@ def home(request):
         'bug_report_condition': assigned_condition_key
     }
 
-    # --- End Bug Report Randomization Logic ---
-
     # Fetch Todos (your existing logic)
     try:
         # Assuming Todo model exists and is imported
@@ -67,7 +80,6 @@ def home(request):
          # Handle case where Todo model might not be defined/imported
          print("Warning: Todo model not found or imported. Skipping Todo fetching.")
          todos = []
-
 
     # Combine contexts and render
     context = {
