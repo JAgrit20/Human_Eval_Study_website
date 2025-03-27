@@ -25,41 +25,49 @@ def home(request):
             'class': 'bug-btn normal'
         },
         'ai': {
-            'url': 'https://bugwise.shaktilab.org/research', # Assuming this is the AI version URL
+            'url': 'https://bugwise.shaktilab.org/research', # AI version URL
             'text': 'File Bug Report with AI',
             'class': 'bug-btn ai'
         }
     }
+    condition_keys = list(BUG_REPORT_CONDITIONS.keys()) # ['normal', 'ai']
 
-    # Check if a condition is already assigned in the session
+    # Check if a valid condition is already assigned in the session
     assigned_condition_key = request.session.get('bug_report_condition')
 
     if assigned_condition_key not in BUG_REPORT_CONDITIONS:
-        # If no valid condition assigned, randomly choose one
-        assigned_condition_key = random.choice(list(BUG_REPORT_CONDITIONS.keys()))
+        # If no valid condition assigned, randomly choose one (50/50 probability)
+        assigned_condition_key = random.choice(condition_keys)
         # Store the assigned condition in the session for persistence
         request.session['bug_report_condition'] = assigned_condition_key
-        print(f"User {request.session.session_key}: Assigned bug report condition '{assigned_condition_key}'") # For debugging
+        # Ensure the session is saved if modified
+        request.session.modified = True
+        print(f"User session {request.session.session_key}: Randomly assigned bug report condition '{assigned_condition_key}'") # For debugging
 
     # Retrieve the details for the assigned condition
     assigned_condition_details = BUG_REPORT_CONDITIONS[assigned_condition_key]
 
-    # Prepare button details for the template
-    # **IMPORTANT for Tracking**: Add the condition as a URL parameter
-    # The external site needs to be able to capture this 'condition' parameter.
+    # Prepare button details for the template including tracking parameter
     button_url_with_tracking = f"{assigned_condition_details['url']}?condition={assigned_condition_key}"
 
     button_context = {
         'bug_report_url': button_url_with_tracking,
         'bug_report_text': assigned_condition_details['text'],
         'bug_report_class': assigned_condition_details['class'],
-        'bug_report_condition': assigned_condition_key # Pass the key if needed elsewhere
+        'bug_report_condition': assigned_condition_key
     }
 
     # --- End Bug Report Randomization Logic ---
 
     # Fetch Todos (your existing logic)
-    todos = Todo.objects.all().order_by('-created_at')
+    try:
+        # Assuming Todo model exists and is imported
+        todos = Todo.objects.all().order_by('-created_at')
+    except NameError:
+         # Handle case where Todo model might not be defined/imported
+         print("Warning: Todo model not found or imported. Skipping Todo fetching.")
+         todos = []
+
 
     # Combine contexts and render
     context = {
