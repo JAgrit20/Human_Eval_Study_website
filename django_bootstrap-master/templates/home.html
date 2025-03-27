@@ -197,6 +197,9 @@
         </div>
 </div>
 
+<div class="todo-count">
+    {{ todos.count }} task{% if todos.count != 1 %}s{% endif %} total
+</div>
 <div class="todo-container">
     <div class="input-group">
         <input type="text" id="todo-input" placeholder="Add a new task...">
@@ -227,9 +230,7 @@
         {% endif %}
     </div>
     
-    <div class="todo-count">
-        {{ todos.count }} task{% if todos.count != 1 %}s{% endif %} total
-    </div>
+  
 </div>
 
 <script>

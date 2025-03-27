@@ -19,8 +19,15 @@ def team(request):
     return render(request, 'team.html', {})
 import random
 from django.shortcuts import render
+def _get_session_key(request):
+    """Ensures a session key exists and returns it."""
+    if not request.session.session_key:
+        request.session.create() # Create session if it doesn't exist
+    return request.session.session_key
+
 
 def home(request):
+    session_key = _get_session_key(request)
     BUG_REPORT_CONDITIONS = {
         'normal': {
             'url': 'https://bugwise.shaktilab.org/report_it',
@@ -29,8 +36,8 @@ def home(request):
         },
         'ai': {
             'url': 'https://bugwise.shaktilab.org/research',
-            'text': 'File Bug Report with AI',
-            'class': 'bug-btn ai'
+            'text': 'File Bug Report',
+            'class': 'bug-btn normal'
         }
     }
     # Define the order explicitly for indexing
@@ -75,7 +82,7 @@ def home(request):
     # Fetch Todos (your existing logic)
     try:
         # Assuming Todo model exists and is imported
-        todos = Todo.objects.all().order_by('-created_at')
+        todos = Todo.objects.filter(session_key=session_key).order_by('-created_at')
     except NameError:
          # Handle case where Todo model might not be defined/imported
          print("Warning: Todo model not found or imported. Skipping Todo fetching.")
@@ -96,7 +103,8 @@ def add_todo(request):
         data = json.loads(request.body)
         title = data.get('title')
         if title:
-            todo = Todo.objects.create(title=title)
+            session_key = _get_session_key(request)
+            todo = Todo.objects.create(title=title, session_key=session_key)
             return JsonResponse({
                 'id': todo.id,
                 'title': todo.title,
@@ -107,19 +115,22 @@ def add_todo(request):
 
 @csrf_exempt
 def toggle_todo(request, todo_id):
-    try:
-        todo = Todo.objects.get(id=todo_id)
+    if request.method == 'POST':
+        session_key = _get_session_key(request)
+        todo = get_object_or_404(Todo, id=todo_id, session_key=session_key)
         todo.completed = not todo.completed
         todo.save()
-        return JsonResponse({'success': True, 'completed': todo.completed})
-    except Todo.DoesNotExist:
-        return JsonResponse({'error': 'Todo not found'}, status=404)
+        return JsonResponse({
+            'id': todo.id,
+            'completed': todo.completed
+        })
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @csrf_exempt
 def delete_todo(request, todo_id):
-    try:
-        todo = Todo.objects.get(id=todo_id)
+    if request.method == 'POST':
+        session_key = _get_session_key(request)
+        todo = get_object_or_404(Todo, id=todo_id, session_key=session_key)
         todo.delete()
-        return JsonResponse({'success': True})
-    except Todo.DoesNotExist:
-        return JsonResponse({'error': 'Todo not found'}, status=404)
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
