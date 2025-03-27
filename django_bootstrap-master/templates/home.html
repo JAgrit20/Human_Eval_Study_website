@@ -104,6 +104,17 @@
         padding: 12px 0;
         border-bottom: 1px solid #eee;
         animation: fadeIn 0.5s;
+        transition: color 0.3s ease;
+    }
+    
+    .todo-item.completed .todo-title {
+        text-decoration: line-through;
+        color: var(--completed-color);
+    }
+
+    .todo-item:nth-child(n+11).completed .todo-title {
+        text-decoration: line-through;
+        color: #e9e9e9 !important;
     }
     
     @keyframes fadeIn {
@@ -126,12 +137,6 @@
     .todo-title {
         flex: 1;
         font-size: 16px;
-        transition: color 0.3s;
-    }
-    
-    .completed .todo-title {
-        text-decoration: line-through;
-        color: var(--light-text);
     }
     
     .delete-btn {
