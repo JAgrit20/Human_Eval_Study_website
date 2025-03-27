@@ -73,10 +73,23 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     }
+# }
+
+# settings.py
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME':'postgres',  # Or your specific database name
+        'USER': 'postgres',  # Your RDS master username
+        'PASSWORD': 'jagrit12345',  # **Use env variable or secrets manager in production!**
+        'HOST': 'database-1.chs8yccyi5lw.us-east-1.rds.amazonaws.com', # The endpoint from AWS console
+        'PORT': '5432',  # Or your specific port if not default
     }
 }
 

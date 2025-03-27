@@ -173,9 +173,9 @@
 <div class="todo-header">
     <h1>Todo List</h1>
     <div class="bug-buttons">
-        <a class="bug-btn normal" href="https://bugcraft.jobmatchify.com/report_it">File Bug Report</a>
-        <a class="bug-btn ai"  href="https://bugcraft.jobmatchify.com/">File Bug Report with AI</a>
-    </div>
+        <a class="{{ bug_report_class }}" href="{{ bug_report_url }}" target="_blank"> {{ bug_report_text }}
+        </a>
+        </div>
 </div>
 
 <div class="todo-container">
@@ -220,19 +220,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const todoList = document.getElementById('todo-list');
     const todoCount = document.querySelector('.todo-count');
     
-    // Add bug report button event listeners
     const bugReportBtn = document.querySelector('.bug-btn.normal');
     const aiBugReportBtn = document.querySelector('.bug-btn.ai');
     
-    bugReportBtn.addEventListener('click', function() {
-        console.log('File Bug Report clicked');
-        // Add your bug report logic here
-    });
+    // Add event listeners only if buttons exist
+    if (bugReportBtn) {
+        bugReportBtn.addEventListener('click', function() {
+            console.log('File Bug Report clicked');
+        });
+    }
     
-    aiBugReportBtn.addEventListener('click', function() {
-        console.log('File Bug Report with AI clicked');
-        // Add your AI bug report logic here
-    });
+    if (aiBugReportBtn) {
+        aiBugReportBtn.addEventListener('click', function() {
+            console.log('File Bug Report with AI clicked');
+        });
+    }
     
     // Add new todo
     addBtn.addEventListener('click', addTodo);
