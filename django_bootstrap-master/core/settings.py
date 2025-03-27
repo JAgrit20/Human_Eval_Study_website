@@ -24,7 +24,7 @@ SECRET_KEY = '*un#_m)yi-jko&r(j_7133i$)@yu2zj%rdymvu2hjr5b4ax3w-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['experiment.jobmatchify.com','3.210.239.32', 'localhost', '127.0.0.1','experiment.shaktilab.org']
+ALLOWED_HOSTS = ['experiment.jobmatchify.com','3.210.239.32', 'localhost', '127.0.0.1','experiment.shaktilab.org','44.204.46.126']
 
 
 # Application definition
