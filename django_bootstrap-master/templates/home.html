@@ -6,14 +6,128 @@
 <!-- Custom Inline Styles for the Todo Section -->
 <style>
     :root {
-        --primary-color: #4361ee;
-        --secondary-color: #3f37c9;
+        --primary-color: #4a90e2;  /* Example: Brighter blue */
+        --secondary-color: #357abd;
         --completed-color: #4cc9f0;
         --background-color: #f8f9fa;
-        --text-color: #212529;
-        --light-text: #6c757d;
+        --text-color: #333;      /* Example: Darker grey */
+        --light-text: #777;
         --danger-color: #e63946;
         --green-color: #2ecc71;
+        --border-color: #ccc;    /* Example: Lighter grey border */
+        --input-bg: #fff;
+        --hover-bg: #f1f1f1;
+    }
+
+    /* --- Enhanced Dropdown Styles --- */
+    .pre-questions-container {
+        background-color: #e9f2fa; /* Light blue background */
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 25px;
+        border: 1px solid #cde0f3;
+    }
+
+    .pre-questions-title {
+        font-size: 1.1em;
+        font-weight: 600;
+        color: var(--secondary-color);
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #cde0f3;
+    }
+
+    .pre-questions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+        gap: 20px; /* Space between columns and rows */
+    }
+
+    .pre-question-item {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pre-question-item label {
+        font-weight: 500;
+        color: var(--text-color);
+        margin-bottom: 8px;
+        font-size: 0.95em;
+        display: flex;       /* Align label and help icon */
+        align-items: center; /* Vertically center label and help icon */
+    }
+
+    .pre-question-item select {
+        padding: 10px 12px; /* Increased padding */
+        border-radius: 6px; /* Slightly more rounded */
+        border: 1px solid var(--border-color);
+        background-color: var(--input-bg);
+        font-size: 1em;
+        cursor: pointer;
+        appearance: none; /* Remove default arrow */
+        background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); /* Custom arrow */
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 10px auto;
+        transition: border-color 0.3s ease;
+    }
+
+    .pre-question-item select:hover {
+        border-color: var(--primary-color);
+    }
+
+    .pre-question-item select:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.3); /* Focus ring */
+    }
+
+    .pre-question-item select option[disabled] {
+        color: var(--light-text);
+    }
+
+    .cursor-help {
+        display: inline-block;
+        margin-left: 6px;
+        background-color: var(--secondary-color);
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 12px;
+        line-height: 18px; /* Center text vertically */
+        text-align: center;
+        font-weight: bold;
+        cursor: help;
+        transition: background-color 0.2s ease;
+    }
+    .cursor-help:hover {
+        background-color: var(--primary-color);
+    }
+
+
+    /* --- Enhanced Header Styles --- */
+    .todo-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 15px; /* Reduced margin */
+        padding-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .page-title { /* Use this class for the h1 */
+        color: var(--primary-color);
+        margin: 0;
+        font-size: 2em; /* Larger */
+        font-weight: 700; /* Bolder */
+    }
+
+    /* --- Bug Button Adjustments (Optional, keep if relevant) --- */
+    .bug-buttons {
+        display: flex;
+        gap: 12px; /* Slightly more space */
+        align-items: center;
     }
     
     .todo-container {
@@ -24,12 +138,7 @@
         margin-top: 20px;
     }
     
-    .todo-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    }
+
     
     h1 {
         color: var(--primary-color);
@@ -108,25 +217,15 @@
         transition: color 0.3s ease;
     }
     
-    .todo-item.completed .todo-title {
-        text-decoration: line-through;
-        color: var(--completed-color);
-    }
+    .todo-item.completed {
+    background-color: rgba(0,0,0,0.05); /* Optional visual debug */
+}
 
-    .todo-item:nth-child(n+11).completed .todo-title {
-        text-decoration: line-through;
-        color: #e9e9e9 !important;
-    }
-    
-    .todo-item:nth-last-child(-n+5) .todo-checkbox:checked {
-        accent-color: #2ecc71 !important;
-        transform: scale(1.1);
-    }
+.todo-item.completed .todo-title {
+    text-decoration: line-through !important;
+    color: var(--completed-color) !important;
+}
 
-    .todo-item:nth-child(-n+10) .delete-btn {
-        display: none !important;
-    }
-    
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -135,6 +234,7 @@
     .todo-item:last-child {
         border-bottom: none;
     }
+
     
     .todo-checkbox {
         margin-right: 10px;
@@ -150,19 +250,17 @@
     }
     
     .delete-btn {
-        background: none;
-        border: none;
-        color: var(--danger-color);
-        font-size: 12px;
-        cursor: pointer;
-        padding: 0 8px;
-        opacity: 0.7;
-        transition: opacity 0.3s;
-    }
+    background: none;
+    border: none;
+    color: var(--danger-color);
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0 8px;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+  /* ADD THIS LINE TO HIDE BY DEFAULT */
+}
 
-    .todo-item:nth-child(n+11) .delete-btn {
-        display: block !important;
-    }
 
     .delete-btn:hover {
         opacity: 1;
@@ -211,7 +309,20 @@
     align-items: center;
 }
 
+   /* Add style for the item number if desired */
+   .item-number {
+        display: inline-block;
+        min-width: 20px; /* Adjust as needed for alignment */
+        margin-right: 5px;
+        color: var(--light-text); /* Optional: Style the number */
+        font-weight: 500;
+    }
 
+    .todo-title {
+        flex: 1;
+        font-size: 16px;
+        /* margin-left: 5px;  Optional: Adjust spacing if needed */
+    }
 
 .bug-report-questions select {
     padding: 6px;
@@ -222,52 +333,49 @@
 </style>
 
 <!-- Modified header section with buttons -->
-<div class="bug-report-questions">
-    <div>
-        <label for="sourceSelect">How did you hear about us?</label>
-        <select id="sourceSelect">
-            <option value="" disabled selected>-- Please choose an option --</option>
-            <option value="Personal Invite Email">Personal Invite Email</option>
-            <option value="Bugzilla Chat Platform">Bugzilla Chat Platform</option>
-            <option value="Instructor">Instructor</option>
-            <option value="LinkedIn post">LinkedIn post</option>
-            <option value="Reddit">Reddit</option>
-            <option value="Other">Other</option>
+<div class="pre-questions-container">
+    <h2 class="pre-questions-title">Instructions: You are requested to add some items in the to-do list. Try to play with the website and if you face any issue, please file a bug report regarding it.  </h2>
+    <div class="pre-questions-grid">
+        <div class="pre-question-item">
+            <label for="sourceSelect">How did you hear about us?</label>
+            <select id="sourceSelect">
+                <option value="" disabled selected>-- Please choose an option --</option>
+                <option value="Personal Invite Email">Personal Invite Email</option>
+                <option value="Bugzilla Chat Platform">Bugzilla Chat Platform</option>
+                <option value="Instructor">Instructor</option>
+                <option value="LinkedIn post">LinkedIn post</option>
+                <option value="Reddit">Reddit</option>
+                <option value="Other">Other</option>
             </select>
-    </div>
-    <div>
-        <label for="experienceSelect">
-            How much experience do you have with filing bug reports
-            <span title="Give your self-assessed level of expertise on filing a bug report" class="cursor-help text-blue-400 ml-1">[?]</span>
+        </div>
+        <div class="pre-question-item">
+            <label for="experienceSelect">
+                Bug Report Experience
+                <span title="Give your self-assessed level of expertise on filing a bug report" class="cursor-help">?</span>
             </label>
-        <select id="experienceSelect">
-            <option value="" disabled selected>-- Please choose an option --</option>
-            <option value="None at all">None at all</option>
-            <option value="Some experience">Some experience</option>
-            <option value="Expert">Expert</option>
-        </select>
+            <select id="experienceSelect">
+                <option value="" disabled selected>-- Select your experience level --</option>
+                <option value="None at all">None at all</option>
+                <option value="Some experience">Some experience</option>
+                <option value="Expert">Expert</option>
+            </select>
+        </div>
     </div>
 </div>
-<div class="todo-header">
-    <h1>Todo List</h1>
-    <div class="bug-buttons">
-        
-        <!-- Mandatory Questions Before Bug Report -->
-       
 
-        <!-- Bug Report Button(s) -->
-        <a class="{{ bug_report_class }}" 
-           href="{{ bug_report_url }}" 
-           id="bug-report-btn" 
+<div class="todo-header">
+    <h1 class="page-title">To-Do Tasks</h1> <div class="bug-buttons">
+        <a class="{{ bug_report_class }}"
+           href="{{ bug_report_url }}"
+           id="bug-report-btn"
            target="_blank">
            {{ bug_report_text }}
         </a>
-
         {% comment %}
-          If you also have an AI bug report button, include something like:
-          <a class="bug-btn ai" href="{{ bug_report_url }}" id="ai-bug-report-btn" target="_blank">
-              File Bug Report with AI
-          </a>
+         If you also have an AI bug report button, include something like:
+         <a class="bug-btn ai" href="{{ bug_report_url }}" id="ai-bug-report-btn" target="_blank">
+             File Bug Report with AI
+         </a>
         {% endcomment %}
     </div>
 </div>
@@ -285,13 +393,14 @@
     <div id="todo-list">
         {% if todos %}
             {% for todo in todos %}
-                <div 
-                  class="todo-item {% if todo.completed %}completed{% endif %}" 
+                <div
+                  class="todo-item {% if todo.completed %}completed{% endif %}"
                   data-id="{{ todo.id }}"
                 >
-                    <input 
-                      type="checkbox" 
-                      class="todo-checkbox" 
+                    <span class="item-number">{{ forloop.counter }}.</span>
+                    <input
+                      type="checkbox"
+                      class="todo-checkbox"
                       {% if todo.completed %}checked{% endif %}
                     >
                     <span class="todo-title">{{ todo.title }}</span>
@@ -382,22 +491,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Handle checkbox and delete buttons (event delegation)
     todoList.addEventListener('click', function(e) {
-        const todoItem = e.target.closest('.todo-item');
-        if (!todoItem) return;
-        
-        const todoId = todoItem.dataset.id;
-        
-        if (e.target.classList.contains('todo-checkbox')) {
-            toggleTodo(todoId, todoItem);
-        } else if (e.target.classList.contains('delete-btn')) {
-            // Only allow deletion for items after position 10
-            const allItems = Array.from(todoList.children);
-            const itemIndex = allItems.indexOf(todoItem);
-            if (itemIndex >= 10) {
-                deleteTodo(todoId, todoItem);
-            }
-        }
-    });
+    const todoItem = e.target.closest('.todo-item');
+    if (!todoItem) return;
+    
+    const todoId = todoItem.dataset.id;
+    
+        // NEW: Add specific handling for delete button
+        if (e.target.classList.contains('delete-btn')) {
+        console.log('Delete button clicked', { todoId }); // Debug log
+        deleteTodo(todoId, todoItem);
+    }
+    if (e.target.classList.contains('todo-checkbox')) {
+        console.log('Checkbox clicked:', {
+            todoId: todoId,
+            todoItem: todoItem,
+            currentClasses: todoItem.classList.toString()
+        });
+        toggleTodo(todoId, todoItem);
+    }
+});
     
     function addTodo() {
         const title = todoInput.value.trim();
@@ -436,7 +548,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <input type="checkbox" class="todo-checkbox">
                 <span class="todo-title">${data.title}</span>
                 <span class="date-info">${formattedDate}</span>
-                <button class="delete-btn">×</button>
+                <button class="delete-btn">Delete</button>
             `;
             
             // Add to list
@@ -449,28 +561,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function toggleTodo(todoId, todoItem) {
-        fetch(`/toggle/${todoId}/`, { method: 'POST' })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    todoItem.classList.toggle('completed', data.completed);
-                    
-                    // Subtle animation for last 5 items when checked
-                    const allItems = Array.from(todoList.children);
-                    const itemIndex = allItems.indexOf(todoItem);
-                    if (itemIndex >= allItems.length - 5) {
-                        const checkbox = todoItem.querySelector('.todo-checkbox');
-                        if (checkbox.checked) {
-                            checkbox.style.transition = 'transform 0.2s ease';
-                            checkbox.style.transform = 'scale(1.1)';
-                        } else {
-                            checkbox.style.transform = 'scale(1)';
-                        }
-                    }
-                }
-            })
-            .catch(error => console.error('Error toggling todo:', error));
-    }
+    fetch(`/toggle/${todoId}/`, { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Toggle response:', data);
+            
+            // Explicitly add/remove 'completed' class
+            if (data.completed) {
+                todoItem.classList.add('completed');
+                console.log('Added completed class');
+            } else {
+                todoItem.classList.remove('completed');
+                console.log('Removed completed class');
+            }
+            
+            // Ensure checkbox state matches
+            const checkbox = todoItem.querySelector('.todo-checkbox');
+            checkbox.checked = data.completed;
+            
+            // Debug: Check final state
+            console.log('Final todo item classes:', todoItem.classList.toString());
+        })
+        .catch(error => console.error('Error toggling todo:', error));
+}
     
     function deleteTodo(todoId, todoItem) {
     // Ensure CSRF token is included if not using @csrf_exempt (though you are using it here)
