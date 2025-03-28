@@ -153,7 +153,7 @@
         background: none;
         border: none;
         color: var(--danger-color);
-        font-size: 24px;
+        font-size: 12px;
         cursor: pointer;
         padding: 0 8px;
         opacity: 0.7;
@@ -230,10 +230,16 @@
             <option value="Personal Invite Email">Personal Invite Email</option>
             <option value="Bugzilla Chat Platform">Bugzilla Chat Platform</option>
             <option value="Instructor">Instructor</option>
-        </select>
+            <option value="LinkedIn post">LinkedIn post</option>
+            <option value="Reddit">Reddit</option>
+            <option value="Other">Other</option>
+            </select>
     </div>
     <div>
-        <label for="experienceSelect">How much experience do you have with filing bug reports?</label>
+        <label for="experienceSelect">
+            How much experience do you have with filing bug reports
+            <span title="Give your self-assessed level of expertise on filing a bug report" class="cursor-help text-blue-400 ml-1">[?]</span>
+            </label>
         <select id="experienceSelect">
             <option value="" disabled selected>-- Please choose an option --</option>
             <option value="None at all">None at all</option>
@@ -292,7 +298,7 @@
                     <span class="date-info">
                         {{ todo.created_at|date:"M d, H:i" }}
                     </span>
-                    <button class="delete-btn">×</button>
+                    <button class="delete-btn">Delete</button>
                 </div>
             {% endfor %}
         {% else %}
@@ -467,35 +473,63 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function deleteTodo(todoId, todoItem) {
-        fetch(`/delete/${todoId}/`, { method: 'POST' })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Animate removal
-                    todoItem.style.opacity = 0;
-                    todoItem.style.height = '0';
-                    todoItem.style.marginTop = '0';
-                    todoItem.style.marginBottom = '0';
-                    todoItem.style.padding = '0';
-                    todoItem.style.overflow = 'hidden';
-                    todoItem.style.transition = 'all 0.3s ease';
-                    
-                    setTimeout(() => {
-                        todoItem.remove();
-                        updateTodoCount(-1);
-                        
-                        // If no todos left, add empty message
-                        if (todoList.children.length === 0) {
-                            const emptyMessage = document.createElement('div');
-                            emptyMessage.className = 'empty-list';
-                            emptyMessage.textContent = 'No tasks yet. Add one above!';
-                            todoList.appendChild(emptyMessage);
-                        }
-                    }, 300);
+    // Ensure CSRF token is included if not using @csrf_exempt (though you are using it here)
+    // const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch(`/delete/${todoId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            // 'X-CSRFToken': csrfToken // Add if CSRF protection is active and needed
+        }
+     })
+    .then(response => {
+        // Check if the response was successful (status code 200-299)
+        if (!response.ok) {
+            // If not okay, throw an error to be caught by .catch()
+            // You might want more specific error handling based on status code
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        // If response is ok, *then* try to parse JSON
+        return response.json();
+    })
+    .then(data => {
+        // *** FIX: Check for data.status === 'success' ***
+        if (data.status === 'success') {
+            // Animate removal (Your existing animation code is good)
+            todoItem.style.opacity = 0;
+            todoItem.style.height = '0';
+            todoItem.style.marginTop = '0';
+            todoItem.style.marginBottom = '0';
+            todoItem.style.padding = '0';
+            todoItem.style.overflow = 'hidden';
+            todoItem.style.transition = 'all 0.3s ease';
+
+            setTimeout(() => {
+                todoItem.remove();
+                updateTodoCount(-1);
+
+                // If no todos left, add empty message
+                if (todoList.children.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'empty-list';
+                    emptyMessage.textContent = 'No tasks yet. Add one above!';
+                    todoList.appendChild(emptyMessage);
                 }
-            })
-            .catch(error => console.error('Error deleting todo:', error));
-    }
+            }, 300);
+        } else {
+            // Handle cases where the backend might return a success status code
+            // but indicate failure in the JSON payload (e.g., {'status': 'failed'})
+            console.error('Backend reported failure:', data);
+            alert('Failed to delete the item. Please try again.'); // Inform user
+        }
+    })
+    .catch(error => {
+         // This will now catch network errors and non-ok HTTP statuses
+         console.error('Error deleting todo:', error);
+         alert('Error deleting item. The item might not exist or belong to you.'); // Inform user
+     });
+}
     
     function updateTodoCount(change) {
         const currentCount = parseInt(todoCount.textContent.split(' ')[0]) + change;

@@ -130,7 +130,9 @@ def toggle_todo(request, todo_id):
 def delete_todo(request, todo_id):
     if request.method == 'POST':
         session_key = _get_session_key(request)
+        # This line ensures only the item with the correct id AND belonging
+        # to the current session can be fetched.
         todo = get_object_or_404(Todo, id=todo_id, session_key=session_key)
         todo.delete()
-        return JsonResponse({'status': 'success'})
+        return JsonResponse({'status': 'success'}) # <-- Sending 'status' key
     return JsonResponse({'error': 'Invalid request'}, status=400)
