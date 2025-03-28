@@ -223,7 +223,7 @@
 
 .todo-item.completed .todo-title {
     text-decoration: line-through !important;
-    color: var(--completed-color) !important;
+    color: #333 !important;
 }
 
     @keyframes fadeIn {
@@ -260,8 +260,13 @@
     transition: opacity 0.3s;
   /* ADD THIS LINE TO HIDE BY DEFAULT */
 }
+#todo-list .todo-item:nth-child(5).completed .todo-title {
+    color: #333 !important;
+}
 
-
+#todo-list .todo-item:nth-child(n+5).completed .todo-title {
+    color: var(--danger-color) !important;
+}
     .delete-btn:hover {
         opacity: 1;
     }
