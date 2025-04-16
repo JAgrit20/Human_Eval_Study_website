@@ -368,6 +368,28 @@
     </div>
 </div>
 
+<div style="background-color: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 24px; width: 100%; max-width: 1200px; margin-left: auto; margin-right: auto;">
+    <h3 style="color: #1f2937; font-size: 1.25rem; font-weight: 600; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #e5e7eb;">Your Device Info</h3>
+    <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 16px;">
+        <div style="display: flex; align-items: center; padding: 12px; background-color: #f9fafb; border-radius: 8px; transition: background-color 0.2s;">
+            <span style="color: #4b5563; font-weight: 500; margin-right: 8px;">Browser:</span>
+            <span id="browserName" style="color: #2563eb; font-weight: 600;"></span>
+        </div>
+        <div style="display: flex; align-items: center; padding: 12px; background-color: #f9fafb; border-radius: 8px; transition: background-color 0.2s;">
+            <span style="color: #4b5563; font-weight: 500; margin-right: 8px;">Software version:</span>
+            <span id="softwareVersion" style="color: #2563eb; font-weight: 600;"></span>
+        </div>
+        <div style="display: flex; align-items: center; padding: 12px; background-color: #f9fafb; border-radius: 8px; transition: background-color 0.2s;">
+            <span style="color: #4b5563; font-weight: 500; margin-right: 8px;">Build number:</span>
+            <span id="buildNumber" style="color: #2563eb; font-weight: 600;"></span>
+        </div>
+        <div style="display: flex; align-items: center; padding: 12px; background-color: #f9fafb; border-radius: 8px; transition: background-color 0.2s;">
+            <span style="color: #4b5563; font-weight: 500; margin-right: 8px;">Environment:</span>
+            <span id="environment" style="color: #2563eb; font-weight: 600;"></span>
+        </div>
+    </div>
+</div>
+
 <div class="todo-header">
     <h1 class="page-title">To-Do Tasks</h1> <div class="bug-buttons">
         <a class="{{ bug_report_class }}"
@@ -423,6 +445,36 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    function getBrowserInfo() {
+                // Detect browser name
+                const userAgent = navigator.userAgent;
+                let browserName = "Unknown";
+                
+                if (userAgent.match(/chrome|chromium|crios/i)) {
+                    browserName = "Chrome";
+                } else if (userAgent.match(/firefox|fxios/i)) {
+                    browserName = "Firefox";
+                } else if (userAgent.match(/safari/i)) {
+                    browserName = "Safari";
+                } else if (userAgent.match(/opr\//i)) {
+                    browserName = "Opera";
+                } else if (userAgent.match(/edg/i)) {
+                    browserName = "Edge";
+                }
+                
+                // Extract version from user agent
+                const versionMatch = userAgent.match(/(?:Chrome|Firefox|Safari|Edge)\/(\d+)/);
+                const version = versionMatch ? versionMatch[1] : 'N/A';
+                
+                // Set the information
+                document.getElementById('browserName').textContent = browserName;
+                document.getElementById('softwareVersion').textContent = version;
+                document.getElementById('buildNumber').textContent = '1.0.0';
+                document.getElementById('environment').textContent = navigator.platform;
+            }
+
+            // Call the function when the page loads
+            getBrowserInfo();
     const todoInput = document.getElementById('todo-input');
     const addBtn = document.getElementById('add-btn');
     const todoList = document.getElementById('todo-list');
@@ -656,5 +708,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
 
 {% endblock content %}
