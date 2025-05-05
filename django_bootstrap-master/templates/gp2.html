@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Our Team - Shakti Lab{% endblock %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- Full‑viewport flexbox to centre the cards -->
+<div class="d-flex align-items-center justify-content-center flex-column" style="min-height:70vh">
+
+  <div class="card shadow border-0 rounded" style="max-width:28rem">
+      <div class="card-body text-center p-5">
+
+          <h2 class="fw-bold mb-3">Bug report Review</h2>
+          <p class="text-muted mb-4">
+              This quick survey (≈ 10 min) helps us improve our model.<br>
+              Click below to get started!
+          </p>
+
+          <form action="{% url 'start_survey' %}" method="post">
+              {% csrf_token %}
+              <button type="submit"
+                      class="btn text-white fw-semibold px-4 py-2 position-relative"
+                      style="
+                          border-radius:1.5rem;
+                          background:linear-gradient(135deg,#44BCFF 0%,#FF44EC 50%,#FF675E 100%);
+                      ">
+                  Start Survey
+              </button>
+          </form>
+
+      </div>
+  </div>
+
+  <!-- Small Thank You Card -->
+  <div class="card shadow-sm border-0 rounded mt-4" 
+       style="max-width: 18rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="card-body text-center p-3">
+      <p class="mb-0 text-white small fw-semibold">Thank you for contributing!</p>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

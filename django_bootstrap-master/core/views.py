@@ -7,6 +7,7 @@ from .models import Todo
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.cache import cache  
 import json
 import random
 from django.shortcuts import render
@@ -17,6 +18,36 @@ def examples(request):
     return render(request, 'examp.html', {})
 def team(request):
     return render(request, 'team.html', {})
+def gp2(request):
+    return render(request, 'gp2.html', {})
+
+SURVEY_URLS = [
+    "https://example.com/survey/1",
+    "https://example.com/survey/2",
+    "https://example.com/survey/3",
+    "https://example.com/survey/4",
+    "https://example.com/survey/5",
+    "https://example.com/survey/6",
+    "https://example.com/survey/7",
+    "https://example.com/survey/8",
+    "https://example.com/survey/9",
+    "https://example.com/survey/10",
+]
+
+def start_survey(request):
+    """
+    Atomically increment a counter held in the cache and
+    redirect to the next survey URL.
+    """
+    if request.method != "POST":
+        return redirect("landing")   # defensive fallback
+
+    # make sure the key exists, then bump it
+    cache.add("survey_counter", 0)          # no‑op if it already exists
+    click_no = cache.incr("survey_counter")  # returns 1, 2, 3, …
+
+    target = SURVEY_URLS[(click_no - 1) % len(SURVEY_URLS)]
+    return redirect(target)
 import random
 from django.shortcuts import render
 def _get_session_key(request):

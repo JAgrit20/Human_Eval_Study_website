@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from .views import index,examples,team
+from .views import index,examples,team,gp2
 from . import views
 
 urlpatterns = [
@@ -23,6 +23,8 @@ urlpatterns = [
     path('home', index),
     path('examples', examples),
     path('team', team),
+    path('gp2', gp2),
+    path("start/", views.start_survey, name="start_survey"),
     path('', views.home, name='home'),
     path('add/', views.add_todo, name='add_todo'),
     path('toggle/<int:todo_id>/', views.toggle_todo, name='toggle_todo'),
