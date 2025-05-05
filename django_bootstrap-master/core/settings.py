@@ -39,6 +39,13 @@ INSTALLED_APPS = [
     'core'
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://experiment.shaktilab.org",
+    "https://*.shaktilab.org",    # wildcard if you use several sub‑domains
+]
+CSRF_COOKIE_SECURE   = True
+SESSION_COOKIE_SECURE = True
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
