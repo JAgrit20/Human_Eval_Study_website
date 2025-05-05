@@ -22,16 +22,9 @@ def gp2(request):
     return render(request, 'gp2.html', {})
 
 SURVEY_URLS = [
-    "https://example.com/survey/1",
-    "https://example.com/survey/2",
-    "https://example.com/survey/3",
-    "https://example.com/survey/4",
-    "https://example.com/survey/5",
-    "https://example.com/survey/6",
-    "https://example.com/survey/7",
-    "https://example.com/survey/8",
-    "https://example.com/survey/9",
-    "https://example.com/survey/10",
+    "https://survey.ucalgary.ca/jfe/form/SV_bNpGBkiznE9SGjA",
+    "https://survey.ucalgary.ca/jfe/form/SV_dj6A0yWpnn8iDDE",
+    "https://survey.ucalgary.ca/jfe/form/SV_0DpOB6TQj3xML7E",
 ]
 
 def start_survey(request):
