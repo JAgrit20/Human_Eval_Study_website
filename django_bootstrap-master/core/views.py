@@ -25,7 +25,8 @@ SURVEY_URLS = [
     "https://survey.ucalgary.ca/jfe/form/SV_bNpGBkiznE9SGjA",
     "https://survey.ucalgary.ca/jfe/form/SV_dj6A0yWpnn8iDDE",
     "https://survey.ucalgary.ca/jfe/form/SV_0DpOB6TQj3xML7E",
-    "https://survey.ucalgary.ca/jfe/form/SV_4O5ntCiBukAK5ts"
+    "https://survey.ucalgary.ca/jfe/form/SV_4O5ntCiBukAK5ts",
+    "https://survey.ucalgary.ca/jfe/form/SV_0GIfzAvGxf5cwQu"
 ]
 
 def start_survey(request):
